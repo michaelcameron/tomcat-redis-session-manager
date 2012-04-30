@@ -21,7 +21,7 @@ public class Tomcat7RedisSessionManager extends ManagerBase implements Lifecycle
 
     protected byte[] NULL_SESSION = "null".getBytes();
 
-    private static Logger log = Logger.getLogger("Tomcat7RedisSessionManager");
+    private static Logger log = Logger.getLogger(Tomcat7RedisSessionManager.class.getName());
     protected String host = "localhost";
     protected int port = 6379;
     protected int database = 0;
@@ -354,7 +354,6 @@ public class Tomcat7RedisSessionManager extends ManagerBase implements Lifecycle
                 session.setMaxInactiveInterval(getMaxInactiveInterval() * 1000);
                 session.access();
                 session.setValid(true);
-                session.resetDirtyTracking();
 
                 if (log.isLoggable(Level.FINE)) {
                     log.fine("Session Contents [" + id + "]:");
@@ -394,16 +393,11 @@ public class Tomcat7RedisSessionManager extends ManagerBase implements Lifecycle
                 }
             }
 
-            Boolean sessionIsDirty = redisSession.isDirty();
-
-            redisSession.resetDirtyTracking();
             byte[] binaryId = redisSession.getId().getBytes();
 
             jedis = acquireConnection();
 
-            if (sessionIsDirty || currentSessionIsPersisted.get() != true) {
-                jedis.set(binaryId, serializer.serializeFrom(redisSession));
-            }
+            jedis.set(binaryId, serializer.serializeFrom(redisSession));
 
             currentSessionIsPersisted.set(true);
 

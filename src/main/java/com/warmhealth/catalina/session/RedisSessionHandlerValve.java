@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 
 public class RedisSessionHandlerValve extends ValveBase {
-  private static Logger log = Logger.getLogger("RedisSessionHandlerValve");
+  private static Logger log = Logger.getLogger(RedisSessionHandlerValve.class.getName());
   private Tomcat7RedisSessionManager manager;
 
   public void setRedisSessionManager(Tomcat7RedisSessionManager manager) {

@@ -1,4 +1,4 @@
-package com.radiadesign.catalina.session;
+package com.warmhealth.catalina.session;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;

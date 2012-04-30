@@ -1,4 +1,4 @@
-package com.radiadesign.catalina.session;
+package com.warmhealth.catalina.session;
 
 import org.apache.catalina.*;
 import org.apache.catalina.util.LifecycleSupport;
@@ -10,10 +10,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +37,7 @@ public class Tomcat7RedisSessionManager extends ManagerBase implements Lifecycle
 
     protected static String name = "Tomcat7RedisSessionManager";
 
-    protected String serializationStrategyClass = "com.radiadesign.catalina.session.JavaSerializer";
+    protected String serializationStrategyClass = "com.warmhealth.catalina.session.JavaSerializer";
 
     /**
      * The lifecycle event support for this component.

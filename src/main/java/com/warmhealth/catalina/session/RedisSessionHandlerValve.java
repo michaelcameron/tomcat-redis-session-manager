@@ -1,4 +1,4 @@
-package com.radiadesign.catalina.session;
+package com.warmhealth.catalina.session;
 
 import org.apache.catalina.Session;
 import org.apache.catalina.connector.Request;

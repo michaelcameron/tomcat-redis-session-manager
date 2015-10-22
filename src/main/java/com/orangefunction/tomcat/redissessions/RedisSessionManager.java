@@ -10,9 +10,6 @@ import org.apache.catalina.Valve;
 import org.apache.catalina.Session;
 import org.apache.catalina.session.ManagerBase;
 
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.apache.commons.pool2.impl.BaseObjectPoolConfig;
-
 import redis.clients.util.Pool;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisSentinelPool;
@@ -22,7 +19,6 @@ import redis.clients.jedis.Protocol;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Set;
 import java.util.EnumSet;
@@ -668,6 +664,7 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
         currentSession.remove();
         currentSessionId.remove();
         currentSessionIsPersisted.remove();
+        currentSessionSerializationMetadata.remove();
         log.trace("Session removed from ThreadLocal :" + redisSession.getIdInternal());
       }
     }

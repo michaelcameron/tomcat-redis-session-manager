@@ -51,6 +51,7 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
   protected String host = "localhost";
   protected int port = 6379;
   protected int database = 0;
+  protected boolean useSSL = false;
   protected String password = null;
   protected int timeout = Protocol.DEFAULT_TIMEOUT;
   protected String sentinelMaster = null;
@@ -86,6 +87,14 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
 
   public void setPort(int port) {
     this.port = port;
+  }
+
+  public boolean getUseSSL() {
+    return useSSL;
+  }
+
+  public void setUseSSL(boolean useSSL) {
+    this.useSSL = useSSL;
   }
 
   public int getDatabase() {
@@ -189,13 +198,7 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
   }
 
   protected Jedis acquireConnection() {
-    Jedis jedis = connectionPool.getResource();
-
-    if (getDatabase() != 0) {
-      jedis.select(getDatabase());
-    }
-
-    return jedis;
+    return connectionPool.getResource();
   }
 
   protected void returnConnection(Jedis jedis, Boolean error) {
@@ -641,12 +644,12 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
       if (getSentinelMaster() != null) {
         Set<String> sentinelSet = getSentinelSet();
         if (sentinelSet != null && sentinelSet.size() > 0) {
-          connectionPool = new JedisSentinelPool(getSentinelMaster(), sentinelSet, this.connectionPoolConfig, getTimeout(), getPassword());
+          connectionPool = new JedisSentinelPool(getSentinelMaster(), sentinelSet, this.connectionPoolConfig, getTimeout(), getPassword(), getDatabase());
         } else {
           throw new LifecycleException("Error configuring Redis Sentinel connection pool: expected both `sentinelMaster` and `sentiels` to be configured");
         }
       } else {
-        connectionPool = new JedisPool(this.connectionPoolConfig, getHost(), getPort(), getTimeout(), getPassword());
+        connectionPool = new JedisPool(this.connectionPoolConfig, getHost(), getPort(), getTimeout(), getPassword(), getDatabase(), getUseSSL());
       }
     } catch (Exception e) {
       e.printStackTrace();
